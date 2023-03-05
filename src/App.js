@@ -6,13 +6,21 @@ import Login from "./components/page/Login/Login";
 import Dashboard from "./components/page/Dashboard/Dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/shared/Header";
+import RequiredAuth from "./components/shared/RequiredAuth";
 
 function App() {
   return (
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route
+          path="/"
+          element={
+            <RequiredAuth>
+              <Dashboard />
+            </RequiredAuth>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

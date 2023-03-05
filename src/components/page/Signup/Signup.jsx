@@ -1,8 +1,11 @@
 import React from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 
 const Signup = () => {
+  const navigate = useNavigate();
+
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
@@ -13,6 +16,10 @@ const Signup = () => {
     createUserWithEmailAndPassword(email, password);
     // console.log(email);
   };
+
+  if (user) {
+    navigate("/");
+  }
 
   return (
     <>
@@ -53,6 +60,12 @@ const Signup = () => {
                 Sign Up
               </button>
             </form>
+            <p className="mt-3 text-start">
+              <span>Already Have An Account? Please </span>
+              <Link className="text-warning" to="/login">
+                Login
+              </Link>
+            </p>
           </div>
         </div>
       </div>

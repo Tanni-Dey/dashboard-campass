@@ -1,10 +1,16 @@
 import React from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 
 const Login = () => {
+  const navigate = useNavigate();
+  let location = useLocation();
+
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
+
+  let from = location?.state?.from?.pathname || "/";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,6 +19,11 @@ const Login = () => {
     signInWithEmailAndPassword(email, password);
     // console.log(email);
   };
+
+  if (user) {
+    navigate(from, { replace: true });
+  }
+
   return (
     <>
       <div className="container">
@@ -52,6 +63,12 @@ const Login = () => {
                 Login
               </button>
             </form>
+            <p className="mt-3 text-start">
+              <span>Create An Account. Please </span>
+              <Link className="text-warning" to="/signup">
+                Sign Up
+              </Link>
+            </p>
           </div>
         </div>
       </div>
