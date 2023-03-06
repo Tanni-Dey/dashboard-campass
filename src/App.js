@@ -7,6 +7,7 @@ import Dashboard from "./components/page/Dashboard/Dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/shared/Header";
 import RequiredAuth from "./components/shared/RequiredAuth";
+import "react-day-picker/dist/style.css";
 
 function App() {
   return (

@@ -1,7 +1,16 @@
 import React from "react";
+import { DayPicker, useInput } from "react-day-picker";
 import { Pie, PieChart, Tooltip } from "recharts";
 
 const Dashboard = () => {
+  const { inputProps, dayPickerProps } = useInput({
+    defaultSelected: new Date(),
+    fromYear: 2021,
+    toYear: 2023,
+    format: "PP",
+    required: true,
+  });
+
   const data02 = [
     {
       book: "Book A",
@@ -37,6 +46,14 @@ const Dashboard = () => {
 
   const handleBooking = (e) => {
     e.preventDefault();
+    const expert = e.target.expert.value;
+    const date = e.target.date.value;
+    const data = {
+      expert: expert,
+      date: date,
+    };
+    window.alert("Book Added");
+    console.log(data);
   };
 
   return (
@@ -74,30 +91,30 @@ const Dashboard = () => {
           <div className="col-md-5">
             <form action="" onSubmit={handleBooking}>
               <div class="mb-3 text-start">
-                <label for="exampleInputEmail1" class="form-label">
+                <label for="expert" class="form-label">
                   Expert
                 </label>
-                <input
-                  type="text"
-                  name="expert"
-                  placeholder="Choose Expert"
-                  required
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                />
+                <select name="expert" id="expert" class="form-control">
+                  <option value="">Select Expert</option>
+                  <option value="monika">Monika</option>
+                  <option value="trina">Trina</option>
+                  <option value="tropa">Tropa</option>
+                  <option value="mina">Mina</option>
+                </select>
               </div>
               <div class="mb-3 text-start">
-                <label for="exampleInputPassword1" class="form-label">
+                <label for="date" class="form-label">
                   Date
                 </label>
+                <DayPicker {...dayPickerProps} />
                 <input
+                  {...inputProps}
                   type="text"
                   name="date"
                   required
                   placeholder="Enter Your Date"
                   class="form-control"
-                  id="exampleInputPassword1"
+                  id="date"
                 />
               </div>
               <button type="submit" class="btn btn-warning">
