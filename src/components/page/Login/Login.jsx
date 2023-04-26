@@ -19,10 +19,7 @@ const Login = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     await signInWithEmailAndPassword(email, password);
-    const { data } = await axios.post(
-      "https://empass-task-server.onrender.com/login",
-      { email }
-    );
+    const { data } = await axios.post("http://localhost:5000/login", { email });
     localStorage.setItem("accessToken", data.accessToken);
     setFirebaseError("");
   };

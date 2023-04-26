@@ -14,7 +14,7 @@ const ViewBooks = () => {
       const email = user.email;
       try {
         const { data } = await axios.get(
-          `https://empass-task-server.onrender.com/books?search=${searchText}&email=${email}`,
+          `http://localhost:5000/books?search=${searchText}&email=${email}`,
           {
             headers: {
               authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -36,7 +36,7 @@ const ViewBooks = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are You Delete this Book")) {
-      axios.delete(`https://empass-task-server.onrender.com/book/${id}`, {
+      axios.delete(`http://localhost:5000/book/${id}`, {
         params: { id: id },
       });
       setisToast(true);

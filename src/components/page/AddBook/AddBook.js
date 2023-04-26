@@ -7,7 +7,7 @@ const AddBook = () => {
     const name = e.target.book.value;
     const author = e.target.author.value;
     axios
-      .post("https://empass-task-server.onrender.com/books", {
+      .post("http://localhost:5000/books", {
         name: name,
         author: author,
       })

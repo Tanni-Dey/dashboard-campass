@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
+import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -18,6 +19,10 @@ const Signup = () => {
     const cPassword = e.target.cPass.value;
     if (password === cPassword) {
       await createUserWithEmailAndPassword(email, password);
+      const { data } = await axios.post("http://localhost:5000/login", {
+        email,
+      });
+      localStorage.setItem("accessToken", data.accessToken);
       setFirebaseError("");
       setCPassError("");
     } else {
