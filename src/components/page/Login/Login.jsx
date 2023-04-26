@@ -1,24 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
   let location = useLocation();
+  const [firebaseError, setFirebaseError] = useState("");
 
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
 
   let from = location?.state?.from?.pathname || "/";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    signInWithEmailAndPassword(email, password);
-    // console.log(email);
+    await signInWithEmailAndPassword(email, password);
+    const { data } = await axios.post(
+      "https://empass-task-server.onrender.com/login",
+      { email }
+    );
+    localStorage.setItem("accessToken", data.accessToken);
+    setFirebaseError("");
   };
+
+  useEffect(() => {
+    if (!error) {
+    } else {
+      if (error.message.includes("user-not-found")) {
+        setFirebaseError("This user email not exist");
+      } else if (error.message.includes("wrong-password")) {
+        setFirebaseError("Password is wrong");
+      } else if (error.message.includes("too-many-requests")) {
+        setFirebaseError(
+          "Your account has been temporary disable for many time request"
+        );
+      }
+    }
+  }, [error]);
 
   if (user) {
     navigate(from, { replace: true });
@@ -57,7 +79,7 @@ const Login = () => {
                   class="form-control"
                   id="exampleInputPassword1"
                 />
-                <p className="text-danger"> {error?.message}</p>
+                <p className="text-danger"> {firebaseError}</p>
               </div>
               <button type="submit" class="btn btn-warning">
                 Login

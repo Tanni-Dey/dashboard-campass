@@ -1,21 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [firebaseError, setFirebaseError] = useState("");
+  const [cPassError, setCPassError] = useState("");
 
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    createUserWithEmailAndPassword(email, password);
+    const cPassword = e.target.cPass.value;
+    if (password === cPassword) {
+      await createUserWithEmailAndPassword(email, password);
+      setFirebaseError("");
+      setCPassError("");
+    } else {
+      setCPassError("Confirm password is not matched");
+    }
     // console.log(email);
   };
+  useEffect(() => {
+    if (!error) {
+    } else {
+      if (error.message.includes("email-already-in-use")) {
+        setFirebaseError("This user email already taken");
+      } else if (
+        error.message.includes("Password should be at least 6 characters")
+      ) {
+        setFirebaseError("Please give at least 6 characters in password");
+      }
+    }
+  }, [error]);
 
   if (user) {
     navigate("/");
@@ -54,7 +75,21 @@ const Signup = () => {
                   class="form-control"
                   id="exampleInputPassword1"
                 />
-                <p className="text-danger"> {error?.message}</p>
+              </div>
+              <div class="mb-3 text-start">
+                <label for="cPass" class="form-label">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  name="cPassword"
+                  required
+                  placeholder="Enter Confirm Password"
+                  class="form-control"
+                  id="cPass"
+                />
+                <p className="text-danger"> {firebaseError}</p>
+                <p className="text-danger"> {cPassError}</p>
               </div>
               <button type="submit" class="btn btn-warning">
                 Sign Up

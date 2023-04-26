@@ -29,7 +29,12 @@ const Header = () => {
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
                 <Link class="nav-link active" aria-current="page" to="/">
-                  Dashboard
+                  Books
+                </Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" aria-current="page" to="/addbook">
+                  Add Book
                 </Link>
               </li>
               <li class="nav-item">
